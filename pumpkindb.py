@@ -65,7 +65,7 @@ class PumpkinDB:
 	def create(self, name, password):
 		logsEnabled = self.logsEnabled
 		if logsEnabled:
-			print("Created Database - " + name + "\nWith Password: " + "*" * len(password))
+			print("[!] Created Database - " + name + "\nWith Password: " + "*" * len(password))
 		newDB = open(name + ".pumpkin", "w")
 	
 	def add(self, key, value):
@@ -73,60 +73,117 @@ class PumpkinDB:
 		PUMPKIN_PASS = self.PUMPKIN_PASS
 
 		if currentDB == "":
-			print("Pumpkin Error! No Pumpkin Selected!")
+			print("Pumpkin Error! - No Pumpkin Selected!")
+			sys.exit(0)
 		else:
 			# Write data
 			dbFile = open(currentDB + ".pumpkin", "a+")
-			key = encrypt(key, PUMPKIN_PASS)
-			value = encrypt(value, PUMPKIN_PASS)
-			dbFile.write(f'["{str(key)}", "{str(value)}"]\n')
+			data_key = encrypt(key, PUMPKIN_PASS)
+			data_value = encrypt(value, PUMPKIN_PASS)
+			data_timestamp = encrypt(str(time.time()), PUMPKIN_PASS)
+			data_hash = encrypt(hashlib.sha256(bytes(str(data_key) + str(data_value) + str(data_timestamp), "utf-8")).hexdigest(), PUMPKIN_PASS)
+			dbFile.write(f'{str(data_key)}|{str(data_value)}|{data_timestamp}|{str(data_hash)}\n')
+			# dbFile.write(f'["{str(key)}", "{str(value)}"]\n')
 
-	def fetch(self, key):
+	def fetchall(self, data_row):
+
 		currentDB = self.currentDB
+		PUMPKIN_PASS = self.PUMPKIN_PASS
+
+		if data_row == "":
+			print("Pumpkin Error! - Return Data Value (Only Paramater In .fetchall()) must be ether - 'key', 'value', 'timestamp', 'hash', or '*'!")
+
+		else:
+			dbFile = open(currentDB + ".pumpkin", "r")
+
+			returnDataList = []
+
+			for line in dbFile.readlines():
+				dataList = []
+
+				# Split the line into a list
+				lineData = list(line.split("|"))
+
+				for data in lineData:
+					dataList.append(decrypt(data, PUMPKIN_PASS).decode("utf-8"))
+
+				if data_row == "*":
+					returnDataList.append(dataList)
+				elif data_row == "key":
+					returnDataList.append(dataList[0])
+				elif data_row == "value":
+					returnDataList.append(dataList[1])
+				elif data_row == "timestamp":
+					returnDataList.append(dataList[2])
+				elif data_row == "hash":
+					returnDataList.append(dataList[3])
+
+			return returnDataList
+
+
+	def fetch(self, key, data_row):
+		currentDB = self.currentDB
+		PUMPKIN_PASS = self.PUMPKIN_PASS
 
 		# Make sure a pumpkin database was selected
 		if currentDB == "":
-			print("Pumpkin Error! No Pumpkin Selected!")
+			print("Pumpkin Error! - No Pumpkin Selected!")
+			sys.exit(0)
+		elif data_row == "":
+			print("Pumpkin Error! - No Row Specified!")
+			sys.exit(0)
+		elif data_row != "key" and data_row != "value" and data_row != "timestamp" and data_row != "hash" and data_row != "*":
+			print("Pumpkin Error! - Return Data Value (3rd Paramater In .fetch()) must be ether - 'key', 'value', 'timestamp', 'hash', or '*'!")
+			sys.exit(0)
 		else:
-
-			PUMPKIN_PASS = self.PUMPKIN_PASS
 
 			# Open pumpkin file for reading
 			dbFile = open(currentDB + ".pumpkin", "r")
 
-			# If the key was "*", then read everything. 
-			if key == "*":
-				return dbFile.read()
-			else:
-				
-				dbFile = dbFile.readlines()
+			
+			dbFile = dbFile.readlines()
 
-				# Return List
-				returnValue = []
+			# Return List
+			returnValue = []
 
-				for line in dbFile:
-					# Grab each key from pumpkin file
-					lineKey = line[2:][:len(encrypt(key, PUMPKIN_PASS))]
-					# Decrypt the key for reading
-					lineKey = decrypt(lineKey, PUMPKIN_PASS).decode("utf-8")
+			for line in dbFile:
+				# Grab each key from pumpkin file
+				lineKey = line[:len(encrypt(key, PUMPKIN_PASS))]
+				# Decrypt the key for reading
+				lineKey = decrypt(lineKey, PUMPKIN_PASS).decode("utf-8")
 
-					if lineKey == key:
-						# Loop over all keys and values
-						line = line.strip()
-						# Replace all of this trash
-						line = line.replace("[", "")
-						line = line.replace("]", "")
-						line = line.replace(",", "")
-						line = line.replace("\"", "")
+				if lineKey == key:
+					# Loop over all keys and values
+					line = line.strip()
 
-						line = decrypt(line[len(encrypt(key, PUMPKIN_PASS)) + 1:], PUMPKIN_PASS).decode("utf-8")
+					# Convert line into a list
+					lineData = list(line.split("|"))
+
+					# 0 = key
+					# 1 = value
+					# 2 = timestamp
+					# 3 = hash
+
+					# Choose what to send back to the user
+					if data_row == "key":
+						returnValue.append(decrypt(lineData[0], PUMPKIN_PASS).decode("utf-8"))
+					elif data_row == "value":
+						returnValue.append(decrypt(lineData[1], PUMPKIN_PASS).decode("utf-8"))
+					elif data_row == "timestamp":
+						returnValue.append(decrypt(lineData[2], PUMPKIN_PASS).decode("utf-8"))
+					elif data_row == "hash":
+						returnValue.append(decrypt(lineData[3], PUMPKIN_PASS).decode("utf-8"))
+					elif data_row == "*":
+						pumpkin_key_data = []
+						for item in lineData:
+							pumpkin_key_data.append(decrypt(item, PUMPKIN_PASS).decode("utf-8"))
 						
-						# Add the value to a list for later use in the users program.
-						returnValue.append(line)
-					else:
-						print("Didn't match..")
+						returnValue.append(pumpkin_key_data)
 
-				return returnValue
+					line = decrypt(line[len(encrypt(key, PUMPKIN_PASS)) + 1:], PUMPKIN_PASS).decode("utf-8")
+					
+
+			return returnValue
 
 	def delete(self, key):
 
