@@ -1,4 +1,5 @@
-![alt text](https://i.imgur.com/lQ3xHv6.png)
+
+![title-image](https://i.imgur.com/lQ3xHv6.png)
 
 # What is Pumpkin?
 Pumpkin or Pumpkin DB, is an extremely lightweight database manager written in **Python3** made for **Python3**
@@ -123,6 +124,40 @@ John
 Robert
 Jane
 Bob
+```
+
+**Fetching All Data**
+If you want to fetch **all** data from your Pumpkin, then use: 
+```python
+>>> pumpkin.fetchall("*")
+[
+	['names', 'Smith', '1572544716.304211', '16de64826267617659286cc544a4a49ac8825a5965879e20c684591e678317bc'],
+	['names', 'Robert', '1572544716.304939', '7dc3cca60cee3e0d9b0e1155a39d7d78ff1748fb85c9bc3525cc192cd62c82b1']
+]
+```
+The ```.fetchall("*")``` function will return a list of data that can be easily parsed and used in your project.
+
+If you want to control what you get in return, then try these options:
+```python
+# Fetch only the Key names from the data
+>>> pumpkin.fetchall("key")
+["names", "data", "other-data"]
+```
+
+```python
+# Fetch only the values of the data
+>>> pumpkin.fetchall("value")
+["John Smith", "My 1st Data", "My 2nd Data"]
+```
+```python
+# Fetch only the timestamps from the data
+>>> pumpkin.fetchall("timestamp")
+['1572544716.304211', '1572544716.304939']
+```
+```python
+# Fetch only the sha256 hashes from the data
+>>> pumpkin.fetchall("hash")
+['16de6482626761765923id9e20efim92de...', '7dc3cca60cee3e0d9b0e149ac88678317bc...']
 ```
 
 **Deleting A Row**
