@@ -175,6 +175,17 @@ Deleting rows could never be easier! Just specify the row name you want to delet
 >>> pumpkin.delete(deleteThisRow)
 ```
 
+You can also delete a row by the sha256 hash associated with the row. If PumpkinDB detects that you enterd a string that is 64 characters long, it deletes the row by hash instead of key.
+```python
+# pumpkin.delete("ROW-HASH")
+
+# Example 1
+>>> pumpkin.delete("d18a27f466f659d2d010566...")
+
+# Example 2
+>>> deleteThisRow = "d18a27f466f659d2d010566..."
+>>> pumpkin.delete(deleteThisRow)
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
