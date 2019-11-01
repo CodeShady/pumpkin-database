@@ -193,22 +193,46 @@ class PumpkinDB:
 		if currentDB == "":
 			print("Pumpkin Error! No Pumpkin Selected!")
 		else:
-			# Open pumpkin file for reading
-			dbFile = open(currentDB + ".pumpkin", "r").readlines()
+			# User didn't enter a hash
 
-			updatedContents = ""
+			if len(key) == 64:
+				# User has entered a hash instead of a key name, so find the hash instead... And remove it!!
 
-			for line in dbFile:
-				line = line.strip()
+				# Open pumpkin file for reading
+				dbFile = open(currentDB + ".pumpkin", "r").readlines()
 
-				lineKey = line[2:][:len(encrypt(key, self.PUMPKIN_PASS))]
+				updatedContents = ""
 
-				# print(line)
+				for line in dbFile:
+					line = line.strip()
 
-				# print(decrypt(lineKey, self.PUMPKIN_PASS).decode("utf-8"))
+					lineData = list(line.split("|"))
 
-				if decrypt(lineKey, self.PUMPKIN_PASS).decode("utf-8") != key:
-					updatedContents += line + "\n"
-					
-			dbFile = open(currentDB + ".pumpkin", "w")
-			dbFile.write(updatedContents)
+					lineHash = decrypt(lineData[3], self.PUMPKIN_PASS).decode("utf-8")
+
+					if lineHash != key:
+						updatedContents += line + "\n"
+
+				dbFile = open(currentDB + ".pumpkin", "w")
+				dbFile.write(updatedContents)
+
+			else:
+				# Open pumpkin file for reading
+				dbFile = open(currentDB + ".pumpkin", "r").readlines()
+
+				updatedContents = ""
+
+				for line in dbFile:
+					line = line.strip()
+
+					lineData = list(line.split("|"))
+
+
+					lineKey = line[2:][:len(encrypt(key, self.PUMPKIN_PASS))]
+					lineName = decrypt(lineData[0], self.PUMPKIN_PASS).decode("utf-8")
+
+					if lineName != key:
+						updatedContents += line + "\n"
+
+				dbFile = open(currentDB + ".pumpkin", "w")
+				dbFile.write(updatedContents)
