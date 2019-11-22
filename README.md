@@ -54,7 +54,7 @@ while True:
 		pumpkin.add("notes", notes)
 
 		# Fetch all notes from the database
-		allNotes = pumpkin.fetch("notes")
+		allNotes = pumpkin.fetch("notes", "value")
 		
 		# Iterate through all notes and print them to the user
 		for note in allNotes:
@@ -106,18 +106,24 @@ Adding to a database is simple. Data is stored inside a **Pumpkin**. A Pumpkin h
 >>> pumpkin.add("greetings", greeting)
 ```
 
-**Fetch Data From Pumpkin**
+**Data From Pumpkin**
 
-**pumpkin.fetch()** returns a list. This is pretty sweet because lists are usually easy to handle!
+**pumpkin.fetch()** returns a list. This is pretty sweet because lists are usually easy to handle! Make sure to declare the **return type**, you can ether use "key", "value", "timestamp", "hash", or "*". All these are pretty easy to understand, if you're confused about the return type, then try a simple code snippet and you will understand this.
 ```python
-# pumpkin.fetch("ROW-NAME")
+# pumpkin.fetch("ROW-NAME", "RETURN-TYPE")
 
 # Example 1
->>> pumpkin.fetch("names")
+>>> pumpkin.fetch("names", "value")
 ["John", "Robert", "Jane", "Bob"]
 
+>>> pumpkin.fetch("names", "timestamp")
+['1574441508.7555654', '1574441514.1020808', '1574441519.7773669']
+
+>>> pumpkin.fetch("names", "hash")
+['2c708e2b57c4985...', '55222814c26b4dd...', '4e6fb950b5c05a21a3...']
+
 # Example 2
->>> allNames = pumpkin.fetch("names")
+>>> allNames = pumpkin.fetch("names", "value")
 >>> for name in allNames:
 >>>		print(name)
 John
