@@ -180,7 +180,8 @@ class PumpkinDB:
 						
 						returnValue.append(pumpkin_key_data)
 
-					line = decrypt(line[len(encrypt(key, PUMPKIN_PASS)) + 1:], PUMPKIN_PASS).decode("utf-8")
+
+					line = decrypt(line[:len(encrypt(key, PUMPKIN_PASS))], PUMPKIN_PASS).decode("utf-8")
 					
 
 			return returnValue
