@@ -2,13 +2,14 @@
 ![title-image](https://i.imgur.com/lQ3xHv6.png)
 
 # What is Pumpkin?
-Pumpkin or Pumpkin DB, is an extremely lightweight database manager written in **Python3** made for **Python3**
+Pumpkin or Pumpkin DB, is an extremely lightweight database manager written in **Python3** made for **Python3**.
+
+Ever since I first started programming, I wanted to make my own Twitter-like app. But I couldn't. I didn't know enough to create anything like that. And I had no idea how to do any type of database stuff. So, for all those beginner programmers, try PumpkinDB. It's easy to use, fast, and I've even written my own tutorial on how to make a console Twitter app in Python3. [Which you can find here](https://www.codeshady.com/how-to-make-a-twitter-app-with-python-pumpkindb/).
 
 ## Donations
-![donation-image](https://media.giphy.com/media/FbyqoWvEHmV9K/giphy.gif)
 I hope PumpkinDB will make your Python experience sweet. Donations are seriously appreciated.
 
-**BTC Donations:** bc1qfpz9q09xmvsk206p0ts6nul88hrxzzkfr4p0rr
+**Bitcoin Donations (BTC):** bc1qfpz9q09xmvsk206p0ts6nul88hrxzzkfr4p0rr
 
 ## Requirements
 Pumpkin requires **Python3**. (Python2 will just not work).
