@@ -5,7 +5,7 @@
 Pumpkin or Pumpkin DB, is an extremely lightweight database manager written in **Python3** made for **Python3**
 
 ## Donations
-$[Please donate pug](https://media.giphy.com/media/FbyqoWvEHmV9K/giphy.gif)
+![Please donate pug](https://media.giphy.com/media/FbyqoWvEHmV9K/giphy.gif)
 I hope PumpkinDB will make your Python experience sweet. Donations are seriously appreciated.
 
 **BTC Donations:** bc1qfpz9q09xmvsk206p0ts6nul88hrxzzkfr4p0rr
